@@ -1,0 +1,57 @@
+/* ================ btn modal================== */
+
+.modal__backdrop {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    inset: 0;
+    background-color: rgba(255, 159, 49, 0.1);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity, visibility;
+    transition-duration: 0.3s;
+}
+
+.modal__backdrop.show {
+    opacity: 1;
+    visibility: visible;
+}
+.modal__backdrop.show .modal__container {
+    transform: scale(1);
+}
+.modal__container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 600px;
+    max-width: 800px;
+    height: calc(100vh - 200px);
+    border-radius: 20px;
+    padding: 30px 30px 30px 50px;
+    transform: scale(0);
+    transition: transform 0.3s;
+    background-color: rgb(114, 199, 252);
+}
+
+.modal__close {
+    font-size: 25px;
+    top: 3px;
+    right: 15px;
+    position: absolute;
+}
+.modal__close:hover {
+    cursor: pointer;
+    color: green;
+}
+
+.modal__content {
+    font-size: 1.6rem;
+    text-align: justify; /* Căn lề hai bên văn bản */
+    height: 100%;
+    overflow-y: auto;
+}
+
+.no-scroll {
+    overflow: hidden;
+}

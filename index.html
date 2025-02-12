@@ -8,10 +8,10 @@
             content="Popzy.js is a lightweight and user-friendly modal library written in pure JavaScript. It is designed for great user experience (2kB, no dependencies, fully customizable with CSS)."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- CSS -->
         <link rel="stylesheet" href="./assets/highlight/styles.css" media="all" />
         <link rel="stylesheet" href="./assets/styles.css" media="all" />
-        <link rel="stylesheet" href="./src/modal.css" />
-        <link rel="stylesheet" href="./modal.min.css" media="all" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/HuyenBanhBao/modal@v1.0.0/modal.min.css" media="all" />
     </head>
     <body>
         <!-- HEADER -->
@@ -324,12 +324,12 @@ modal.close();</code></pre>
         </div>
         <!-- /CONTAINER -->
         <script src="./assets/highlight/highlight.js"></script>
-        <script src="./src/modal.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/HuyenBanhBao/modal@v1.0.0/modal.min.js"></script>
         <script>
             // highlight
             hljs.initHighlightingOnLoad();
 
-            // Modal samples
+            // Basic modal ==========================
             const modal1Basic = document.querySelector(".js-popzy-modal-1");
 
             const modal1 = new Modal({
@@ -345,6 +345,51 @@ modal.close();</code></pre>
 
             modal1Basic.onclick = () => {
                 modal1.open();
+            };
+
+            // Button modal ==========================
+            const modal2Btn = document.querySelector(".js-popzy-modal-2");
+
+            const modal2 = new Modal({
+                content: `
+                    <h1>Button modal</h1>
+                    <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex porro, et cumque odit deleniti
+                    accusantium dolorum ratione, excepturi quam commodi nisi? Saepe, repellendus blanditiis explicabo
+                    magni distinctio natus eligendi pariatur?
+                    </p>
+                `,
+                closeMethods: ["escape"],
+                footer: true,
+            });
+            modal2.addFooterButton("Cancel", "modal-btn", () => {
+                modal2.close();
+            });
+            modal2.addFooterButton("Confirm", "modal-btn primary", () => {
+                console.log("123");
+                modal2.close();
+            });
+            modal2Btn.onclick = () => {
+                modal2.open();
+            };
+
+            // Basic modal ==========================
+            const modal7Basic = document.querySelector(".js-popzy-modal-7");
+
+            const modal7 = new Modal({
+                content: `
+                    <h1>Basic modal</h1>
+                    <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex porro, et cumque odit deleniti
+                    accusantium dolorum ratione, excepturi quam commodi nisi? Saepe, repellendus blanditiis explicabo
+                    magni distinctio natus eligendi pariatur?
+                    </p>
+                    <button class="btn" onclick="modal1.open()">Open Basic modal</button>
+                `,
+            });
+
+            modal7Basic.onclick = () => {
+                modal7.open();
             };
         </script>
     </body>

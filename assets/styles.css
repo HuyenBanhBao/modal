@@ -207,6 +207,28 @@ code:not(.hljs) {
 .important {
     text-decoration: underline;
 }
+/* =============== Button ========== */
+.footer__btn {
+    display: flex;
+    justify-content: flex-end;
+}
+.modal-btn ~ .modal-btn {
+    margin-left: 12px;
+}
+.modal-btn {
+    display: inline-flex;
+    align-items: end;
+    font-size: 1.6rem;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 5px;
+    border: none;
+    background-color: #666;
+}
+.primary {
+    background-color: #465d8e;
+}
+/* ============================== */
 /* .wrapper {
     position: fixed;
     inset: 0;

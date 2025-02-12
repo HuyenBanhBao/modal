@@ -31,7 +31,7 @@
     padding: 30px 30px 30px 50px;
     transform: scale(0);
     transition: transform 0.3s;
-    background-color: rgb(67, 139, 255);
+    background-color: #ebebec;
 }
 
 .modal__close {

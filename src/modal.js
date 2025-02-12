@@ -218,7 +218,7 @@ Modal.prototype.open = function () {
     this._onTransitionEnd(this.opt.onOpen);
 
     // stop scroll
-    if (this.opt.enableScrollLock) {
+    if (Modal.elements.length === 1 && this.opt.enableScrollLock) {
         const target = this.opt.scrollLockTarget();
 
         if (this._hasScrollbar(target)) {

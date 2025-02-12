@@ -3,26 +3,44 @@ Modal.elements = [];
 // TẠO THƯ VIỆN MODAL ========================================================
 // ===========================================================================
 function Modal(options = {}) {
+    if (!options.content && !options.templateId) {
+        console.error("You must provide one of 'content' or 'templateId'.");
+        return;
+    }
+
+    if (options.content && options.templateId) {
+        options.templateId = null;
+        console.warn(
+            "Both 'content' and 'templateId' are specified. 'content' will take precedence, and 'templateId' will be ignored"
+        );
+    }
+
+    if (options.templateId) {
+        this.template = document.querySelector(`#${options.templateId}`);
+
+        if (!this.template) {
+            console.error(`${options.templateId} does not exist`);
+            return;
+        }
+    }
+
     // Nhận giá trị truyền vào từ modal ======================================
     this.opt = Object.assign(
         {
             // templateId,
+            enableScrollLock: true,
             cssClass: [],
             destroyOnClose: true,
             closeMethods: ["button", "overlay", "escape"],
             footer: false,
+            scrollLockTarget: () => document.body,
             // onOpen,
             // onClose,
         },
         options
     );
 
-    this.template = document.querySelector(`#${this.opt.templateId}`);
-
-    if (!this.template) {
-        console.error(`${this.opt.templateId} does not exist`);
-    }
-
+    this.content = this.opt.content;
     const { closeMethods } = this.opt;
     this._allowButtonClose = closeMethods.includes("button");
     this._allowBackdropClose = closeMethods.includes("overlay");
@@ -58,8 +76,11 @@ Modal.prototype._getScrollbarWidth = () => {
 // HÀM TẠO MODAL MỚI =======================================================
 // =========================================================================
 Modal.prototype._build = function () {
-    const content = this.template.content.cloneNode(true);
+    const contentNode = this.content ? document.createElement("div") : this.template.content.cloneNode(true);
 
+    if (this.content) {
+        contentNode.innerHTML = this.content;
+    }
     // Create modal element
     this._backdrop = document.createElement("div");
     this._backdrop.className = "modal__backdrop";
@@ -83,11 +104,11 @@ Modal.prototype._build = function () {
         container.append(closeBtn);
     }
     // =================
-    const modalContent = document.createElement("div");
-    modalContent.className = "modal__content";
+    this._modalContent = document.createElement("div");
+    this._modalContent.className = "modal__content";
     // =================
-    modalContent.append(content);
-    container.append(modalContent);
+    this._modalContent.append(contentNode);
+    container.append(this._modalContent);
 
     // ==================
     if (this.opt.footer) {
@@ -108,6 +129,13 @@ Modal.prototype._build = function () {
     // ===============
     this._backdrop.append(container);
     document.body.append(this._backdrop);
+};
+// HÀM XỬ LÝ THAY THẾ CONTENT ===============================================
+Modal.prototype.setContent = function (content) {
+    this.content = content;
+    if (this._modalContent) {
+        this._modalContent.innerHTML = this.content;
+    }
 };
 
 // HÀM XỬ LÝ THÊM FOOTER CONTENT ============================================
@@ -136,6 +164,17 @@ Modal.prototype._renderFooterButton = function () {
             this._modalFooter.append(button);
         });
     }
+};
+
+// HÀM TÍNH TOÁN CUỘN ======================================================
+Modal.prototype._hasScrollbar = (target) => {
+    if ([document.documentElement, document.body].includes(target)) {
+        return (
+            document.documentElement.scrollHeight > document.documentElement.clientHeight ||
+            document.body.scrollHeight > document.body.clientHeight
+        );
+    }
+    return target.scrollHeight > target.clientHeight;
 };
 
 Modal.prototype._createButton = function (title, cssClass, callback) {
@@ -179,9 +218,15 @@ Modal.prototype.open = function () {
     this._onTransitionEnd(this.opt.onOpen);
 
     // stop scroll
-    document.body.classList.add("no-scroll");
+    if (this.opt.enableScrollLock) {
+        const target = this.opt.scrollLockTarget();
 
-    document.body.style.paddingRight = this._getScrollbarWidth() + "px";
+        if (this._hasScrollbar(target)) {
+            target.classList.add("no-scroll");
+            const targetPadRight = parseInt(getComputedStyle(target).paddingRight);
+            target.style.paddingRight = targetPadRight + this._getScrollbarWidth() + "px";
+        }
+    }
 
     return this._backdrop;
 };
@@ -212,9 +257,13 @@ Modal.prototype.close = function (destroy = this.opt.destroyOnClose) {
             this._modalFooter = null;
         }
 
-        if (!Modal.elements.length) {
-            document.body.classList.remove("no-scroll");
-            document.body.style.paddingRight = "";
+        if (this.opt.enableScrollLock && !Modal.elements.length) {
+            const target = this.opt.scrollLockTarget();
+
+            if (this._hasScrollbar(target)) {
+                target.classList.remove("no-scroll");
+                target.style.paddingRight = "";
+            }
         }
         // Chạy log khi modal đóng
         if (typeof this.opt.onClose === "function") this.opt.onClose();

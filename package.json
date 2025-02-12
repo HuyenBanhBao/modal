@@ -1,9 +1,9 @@
 {
-  "scripts": {
-    "minify": "terser modal.js -o modal.min.js && csso modal.css -o modal.min.css"
-  },
-  "dependencies": {
-    "csso-cli": "^4.0.2",
-    "terser": "^5.37.0"
-  }
+    "scripts": {
+        "minify": "terser ./src/modal.js -o modal.min.js && csso ./src/modal.css -o modal.min.css"
+    },
+    "dependencies": {
+        "csso-cli": "^4.0.2",
+        "terser": "^5.37.0"
+    }
 }

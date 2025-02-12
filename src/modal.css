@@ -31,14 +31,20 @@
     padding: 30px 30px 30px 50px;
     transform: scale(0);
     transition: transform 0.3s;
-    background-color: rgb(114, 199, 252);
+    background-color: rgb(67, 139, 255);
 }
 
 .modal__close {
-    font-size: 25px;
-    top: 3px;
-    right: 15px;
     position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    border-radius: 99px;
+    background-color: #ebebeb;
+    font-size: 2rem;
+    outline: none;
+    border: none;
 }
 .modal__close:hover {
     cursor: pointer;
